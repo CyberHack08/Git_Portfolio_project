@@ -1,1 +1,326 @@
-</>  jhfdtyuijhgcgjlrkhgdf
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cybersecurity Engineer Portfolio</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0a0e27 0%, #1a1f3a 100%);
+            color: #e0e0e0;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            text-align: center;
+            padding: 60px 20px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 15px;
+            margin-bottom: 40px;
+            border: 1px solid rgba(0, 255, 136, 0.2);
+            box-shadow: 0 8px 32px rgba(0, 255, 136, 0.1);
+        }
+
+        h1 {
+            font-size: 3em;
+            color: #00ff88;
+            margin-bottom: 10px;
+            text-shadow: 0 0 20px rgba(0, 255, 136, 0.5);
+        }
+
+        .subtitle {
+            font-size: 1.4em;
+            color: #7dd3fc;
+            margin-bottom: 20px;
+        }
+
+        .tagline {
+            color: #b0b0b0;
+            font-size: 1.1em;
+        }
+
+        .section {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 40px;
+            margin-bottom: 30px;
+            border-radius: 15px;
+            border: 1px solid rgba(0, 255, 136, 0.15);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .section:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 40px rgba(0, 255, 136, 0.2);
+        }
+
+        h2 {
+            color: #00ff88;
+            margin-bottom: 25px;
+            font-size: 2em;
+            border-bottom: 2px solid rgba(0, 255, 136, 0.3);
+            padding-bottom: 10px;
+        }
+
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .skill-card {
+            background: rgba(0, 255, 136, 0.08);
+            padding: 20px;
+            border-radius: 10px;
+            border: 1px solid rgba(0, 255, 136, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .skill-card:hover {
+            background: rgba(0, 255, 136, 0.15);
+            border-color: #00ff88;
+        }
+
+        .skill-card h3 {
+            color: #7dd3fc;
+            margin-bottom: 10px;
+            font-size: 1.2em;
+        }
+
+        .skill-list {
+            color: #c0c0c0;
+            list-style: none;
+        }
+
+        .skill-list li {
+            padding: 5px 0;
+            padding-left: 20px;
+            position: relative;
+        }
+
+        .skill-list li:before {
+            content: "▹";
+            color: #00ff88;
+            position: absolute;
+            left: 0;
+        }
+
+        .project {
+            background: rgba(125, 211, 252, 0.05);
+            padding: 25px;
+            margin-bottom: 20px;
+            border-radius: 10px;
+            border-left: 4px solid #7dd3fc;
+        }
+
+        .project h3 {
+            color: #7dd3fc;
+            margin-bottom: 10px;
+            font-size: 1.5em;
+        }
+
+        .project-desc {
+            color: #d0d0d0;
+            margin-bottom: 15px;
+        }
+
+        .tech-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .tag {
+            background: rgba(0, 255, 136, 0.2);
+            color: #00ff88;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            border: 1px solid rgba(0, 255, 136, 0.3);
+        }
+
+        .contact {
+            text-align: center;
+        }
+
+        .contact-links {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        .contact-link {
+            color: #7dd3fc;
+            text-decoration: none;
+            padding: 12px 30px;
+            border: 2px solid #7dd3fc;
+            border-radius: 25px;
+            transition: all 0.3s ease;
+            font-weight: 600;
+        }
+
+        .contact-link:hover {
+            background: #7dd3fc;
+            color: #0a0e27;
+            transform: scale(1.05);
+            box-shadow: 0 5px 20px rgba(125, 211, 252, 0.4);
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2em;
+            }
+
+            .subtitle {
+                font-size: 1.2em;
+            }
+
+            .section {
+                padding: 25px;
+            }
+
+            .skills-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Your Name</h1>
+            <div class="subtitle">Cybersecurity Engineer</div>
+            <p class="tagline">Protecting Digital Assets | Threat Analysis | Security Architecture</p>
+        </header>
+
+        <section class="section">
+            <h2>About Me</h2>
+            <p>Passionate cybersecurity engineer with expertise in threat detection, incident response, and security architecture. Dedicated to building robust security solutions and staying ahead of emerging threats in an ever-evolving digital landscape.</p>
+        </section>
+
+        <section class="section">
+            <h2>Core Skills</h2>
+            <div class="skills-grid">
+                <div class="skill-card">
+                    <h3>Security Operations</h3>
+                    <ul class="skill-list">
+                        <li>SIEM Management</li>
+                        <li>Threat Hunting</li>
+                        <li>Incident Response</li>
+                        <li>Vulnerability Assessment</li>
+                    </ul>
+                </div>
+                <div class="skill-card">
+                    <h3>Network Security</h3>
+                    <ul class="skill-list">
+                        <li>Firewall Configuration</li>
+                        <li>IDS/IPS</li>
+                        <li>Network Monitoring</li>
+                        <li>Penetration Testing</li>
+                    </ul>
+                </div>
+                <div class="skill-card">
+                    <h3>Application Security</h3>
+                    <ul class="skill-list">
+                        <li>Code Review</li>
+                        <li>OWASP Top 10</li>
+                        <li>API Security</li>
+                        <li>Secure SDLC</li>
+                    </ul>
+                </div>
+                <div class="skill-card">
+                    <h3>Tools & Technologies</h3>
+                    <ul class="skill-list">
+                        <li>Splunk, ELK Stack</li>
+                        <li>Wireshark, Nmap</li>
+                        <li>Metasploit, Burp Suite</li>
+                        <li>Python, PowerShell</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>Featured Projects</h2>
+            
+            <div class="project">
+                <h3>Enterprise Security Monitoring Platform</h3>
+                <p class="project-desc">Designed and implemented a comprehensive SIEM solution that reduced incident detection time by 60% and automated threat response workflows.</p>
+                <div class="tech-tags">
+                    <span class="tag">Splunk</span>
+                    <span class="tag">Python</span>
+                    <span class="tag">API Integration</span>
+                    <span class="tag">Automation</span>
+                </div>
+            </div>
+
+            <div class="project">
+                <h3>Vulnerability Management System</h3>
+                <p class="project-desc">Built an automated vulnerability scanning and remediation tracking system that manages security patches across 500+ endpoints.</p>
+                <div class="tech-tags">
+                    <span class="tag">Nessus</span>
+                    <span class="tag">PowerShell</span>
+                    <span class="tag">Dashboard</span>
+                </div>
+            </div>
+
+            <div class="project">
+                <h3>Phishing Detection Tool</h3>
+                <p class="project-desc">Created a machine learning-based email analysis tool that identifies phishing attempts with 95% accuracy, protecting users from social engineering attacks.</p>
+                <div class="tech-tags">
+                    <span class="tag">Python</span>
+                    <span class="tag">Machine Learning</span>
+                    <span class="tag">Email Security</span>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>Certifications</h2>
+            <div class="skills-grid">
+                <div class="skill-card">
+                    <h3>CISSP</h3>
+                    <p style="color: #b0b0b0;">Certified Information Systems Security Professional</p>
+                </div>
+                <div class="skill-card">
+                    <h3>CEH</h3>
+                    <p style="color: #b0b0b0;">Certified Ethical Hacker</p>
+                </div>
+                <div class="skill-card">
+                    <h3>Security+</h3>
+                    <p style="color: #b0b0b0;">CompTIA Security+</p>
+                </div>
+                <div class="skill-card">
+                    <h3>OSCP</h3>
+                    <p style="color: #b0b0b0;">Offensive Security Certified Professional</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="section contact">
+            <h2>Get In Touch</h2>
+            <p style="margin-bottom: 20px;">Interested in collaboration or have a security challenge? Let's connect!</p>
+            <div class="contact-links">
+                <a href="mailto:your.email@example.com" class="contact-link">Email</a>
+                <a href="https://linkedin.com/in/yourprofile" class="contact-link">LinkedIn</a>
+                <a href="https://github.com/yourprofile" class="contact-link">GitHub</a>
+            </div>
+        </section>
+    </div>
+</body>
+</html>
