@@ -1,0 +1,725 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CyberHackGames</title>
+    <!-- Load Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        /* Custom styles for the hacker aesthetic */
+        body {
+            font-family: 'Space Mono', monospace;
+            background-color: #0d1117; /* Darker background */
+            color: #e6e6e6;
+        }
+        .terminal-shadow {
+            box-shadow: 0 0 10px #34d399, 0 0 20px #10b981;
+        }
+        .neon-border {
+            border: 2px solid #34d399;
+        }
+        .game-button {
+            transition: all 0.2s ease-in-out;
+        }
+        .game-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(52, 211, 153, 0.5);
+            background-color: #064e3b;
+        }
+        .terminal-text {
+            color: #34d399;
+            white-space: pre-wrap;
+        }
+        /* Custom scrollbar for terminal output */
+        #output-terminal::-webkit-scrollbar {
+            width: 8px;
+        }
+        #output-terminal::-webkit-scrollbar-thumb {
+            background-color: #34d399;
+            border-radius: 4px;
+        }
+        #output-terminal::-webkit-scrollbar-track {
+            background-color: #1f2937;
+        }
+        .tutorial-message {
+            margin-top: 1rem;
+            padding: 0.75rem;
+            background-color: rgba(250, 204, 21, 0.2); /* Amber tint */
+            border-left: 4px solid #facc15;
+            color: #fcd34d;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body class="min-h-screen p-4 md:p-8 flex flex-col items-center">
+
+    <div class="max-w-4xl w-full">
+        <!-- Header -->
+        <header class="text-center mb-8 p-4 bg-gray-800 rounded-xl terminal-shadow">
+            <h1 class="text-5xl font-bold text-lime-400">
+                <span class="text-gray-500">&lt;</span>CyberHack<span class="text-gray-500">/&gt;</span>Games
+            </h1>
+            <p class="text-sm mt-2 text-gray-400">Learn Security by Hacking the Basics</p>
+        </header>
+
+        <!-- Main Content Area -->
+        <main class="flex flex-col md:flex-row gap-6">
+
+            <!-- Game Selection and Scoreboard -->
+            <div class="md:w-1/3 bg-gray-800 p-6 rounded-xl neon-border h-full">
+                <h2 class="text-2xl font-semibold mb-4 text-lime-400">Missions</h2>
+                <div id="game-selector" class="space-y-4">
+                    <button class="game-button w-full py-3 px-4 bg-gray-700 text-left rounded-lg text-lg hover:bg-gray-600 transition duration-300" onclick="loadGame('phishing')">
+                        1. Phishing Finder
+                        <p class="text-xs text-gray-400 mt-1">Identify malicious links and emails.</p>
+                    </button>
+                    <button class="game-button w-full py-3 px-4 bg-gray-700 text-left rounded-lg text-lg hover:bg-gray-600 transition duration-300" onclick="loadGame('password')">
+                        2. Password Protector
+                        <p class="text-xs text-gray-400 mt-1">Defend against brute force attacks.</p>
+                    </button>
+                    <button class="game-button w-full py-3 px-4 bg-gray-700 text-left rounded-lg text-lg hover:bg-gray-600 transition duration-300" onclick="loadGame('firewall')">
+                        3. Firewall Fortress
+                        <p class="text-xs text-gray-400 mt-1">Block unauthorized network traffic.</p>
+                    </button>
+                    <button class="game-button w-full py-3 px-4 bg-gray-700 text-left rounded-lg text-lg hover:bg-gray-600 transition duration-300" onclick="loadGame('encryption')">
+                        4. Encryption Decryptor
+                        <p class="text-xs text-gray-400 mt-1">Crack a cipher to reveal a secret message.</p>
+                    </button>
+                </div>
+
+                <div class="mt-8 pt-4 border-t border-gray-600">
+                    <h3 class="text-xl font-semibold mb-3 text-lime-400">Scoreboard</h3>
+                    <p id="score-display" class="text-3xl text-center text-red-400">0 / 0</p>
+                    <button class="game-button w-full mt-4 py-2 bg-red-800 hover:bg-red-700 rounded-lg text-white" onclick="resetScores()">Reset Progress</button>
+                </div>
+            </div>
+
+            <!-- Game Display Area -->
+            <div class="md:w-2/3 bg-gray-900 p-6 rounded-xl terminal-shadow">
+                <div id="game-container">
+                    <!-- Initial Welcome/Game content will be loaded here by JS -->
+                    <div class="flex flex-col items-center justify-center h-96 text-center">
+                        <svg class="w-16 h-16 text-lime-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2l4-4m5.618 7.382c-.052.128-.103.257-.152.387-1.125 2.502-3.874 4-6.818 4-2.944 0-5.693-1.498-6.818-4-.049-.13-.1-.259-.152-.387M12 21V3m0 0l-4 4m4-4l4 4"></path>
+                        </svg>
+                        <h2 class="text-3xl text-lime-400 mb-2">System Initializing...</h2>
+                        <p class="text-gray-400">Loading welcome protocol...</p>
+                    </div>
+                </div>
+                <!-- Terminal Output (Special Feature) -->
+                <div class="mt-6">
+                    <h3 class="text-xl font-semibold mb-2 text-red-500">$ SYSTEM_LOG:</h3>
+                    <div id="output-terminal" class="bg-gray-800 p-3 h-32 overflow-y-scroll rounded-lg border border-red-900 text-sm terminal-text">
+                        [INIT] Starting CyberHackGames Platform...<br>
+                        [SUCCESS] Tailwind Interface Loaded.<br>
+                        [READY] Awaiting User Input.
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <footer class="mt-8 text-center text-gray-500 text-sm p-4 w-full">
+        &copy; 2025 CyberHackGames Project. Designed by a fellow Security Engineer.
+    </footer>
+
+    <script>
+        const gameContainer = document.getElementById('game-container');
+        const outputTerminal = document.getElementById('output-terminal');
+        const scoreDisplay = document.getElementById('score-display');
+        // Updated game sequence to include the new encryption game
+        const gameSequence = ['phishing', 'password', 'firewall', 'encryption'];
+
+        let score = {
+            total: 0,
+            correct: 0
+        };
+        
+        // --- Core Functions ---
+
+        /**
+         * Initializes the game state and loads the selected game UI.
+         * @param {string} gameName - The name of the game ('phishing', 'password', 'firewall', 'encryption').
+         */
+        function loadGame(gameName) {
+            logToTerminal(`[LOADING] Initializing Mission: ${gameName.toUpperCase()}...`);
+            gameContainer.innerHTML = ''; // Clear previous content
+
+            // Clear any guided tour status if the user selects a game manually
+            if (gameContainer.dataset.guidedTour === 'true') {
+                gameContainer.dataset.guidedTour = 'false';
+                logToTerminal(`[ALERT] Guided tour cancelled. Manual selection activated.`);
+            }
+
+            switch (gameName) {
+                case 'phishing':
+                    loadPhishingFinder();
+                    break;
+                case 'password':
+                    loadPasswordProtector();
+                    break;
+                case 'firewall':
+                    loadFirewallFortress();
+                    break;
+                case 'encryption':
+                    loadEncryptionDecryptor();
+                    break;
+                default:
+                    gameContainer.innerHTML = `<p class="text-red-500">Error: Mission not found.</p>`;
+            }
+        }
+
+        /**
+         * Adds a message to the custom terminal output.
+         * @param {string} message - The message to log.
+         */
+        function logToTerminal(message) {
+            const now = new Date().toLocaleTimeString();
+            outputTerminal.innerHTML += `<span class="text-gray-500">(${now})</span> ${message}<br>`;
+            outputTerminal.scrollTop = outputTerminal.scrollHeight; // Auto-scroll to bottom
+        }
+
+        /**
+         * Updates the score and the score display element.
+         * @param {boolean} isCorrect - Whether the user's action was correct.
+         */
+        function updateScore(isCorrect) {
+            score.total++;
+            if (isCorrect) {
+                score.correct++;
+            }
+            scoreDisplay.textContent = `${score.correct} / ${score.total}`;
+        }
+
+        function resetScores() {
+            score.total = 0;
+            score.correct = 0;
+            scoreDisplay.textContent = `0 / 0`;
+            logToTerminal(`[ALERT] Progress data wiped. Starting new session.`, 'ALERT');
+            // Reload the current game if one is loaded, or go to welcome screen
+            if (gameContainer.dataset.currentGame && gameContainer.dataset.currentGame !== 'welcome') {
+                loadGame(gameContainer.dataset.currentGame);
+            } else {
+                 loadWelcomeScreen();
+            }
+        }
+        
+        // --- Onboarding/Tutorial Functions ---
+
+        function loadWelcomeScreen() {
+            gameContainer.dataset.currentGame = 'welcome';
+            gameContainer.dataset.guidedTour = 'false';
+
+            gameContainer.innerHTML = `
+                <div class="flex flex-col items-center justify-center h-96 text-center">
+                    <svg class="w-16 h-16 text-lime-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 11c0 3.517-1.009 6.799-2.753 9.76a1.292 1.292 0 01-1.638-.112l-1.859-2.09c-.198-.222-.444-.41-.722-.559M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                    <h2 class="text-4xl text-lime-400 mb-4 font-bold">Welcome, Cyber Rookie!</h2>
+                    <p class="text-gray-400 mb-6">
+                        This platform is designed to introduce you to key cybersecurity concepts through hands-on missions.
+                        Are you ready to start your training?
+                    </p>
+                    <div class="flex space-x-4">
+                        <button class="game-button py-3 px-8 bg-lime-600 hover:bg-lime-700 text-white font-bold rounded-lg" onclick="startGuidedTour()">
+                            Start Guided Tour (Recommended for New Players)
+                        </button>
+                        <button class="game-button py-3 px-8 bg-gray-600 hover:bg-gray-700 text-white font-bold rounded-lg" onclick="logToTerminal('[READY] Please select a mission from the left panel.');">
+                            Explore Missions Manually
+                        </button>
+                    </div>
+                </div>
+            `;
+            logToTerminal(`[SYSTEM] Welcome screen displayed. Awaiting user choice.`, 'SYSTEM');
+        }
+
+        function startGuidedTour() {
+            gameContainer.dataset.guidedTour = 'true';
+            logToTerminal('[GUIDE] Guided Tour Initiated. Starting Mission 1: Phishing Finder...');
+            loadGuidedNextStep('phishing');
+        }
+
+        function loadGuidedNextStep(gameName) {
+            // Check if the guided tour is still active
+            if (gameContainer.dataset.guidedTour !== 'true') return;
+            
+            let tutorialMessage = '';
+            
+            if (gameName === 'phishing') {
+                tutorialMessage = 'TUTORIAL 1/4: Your first mission is to spot **Phishing** attempts. Remember to check for urgency, strange links, and unusual requests!';
+                loadPhishingFinder();
+            } else if (gameName === 'password') {
+                tutorialMessage = 'TUTORIAL 2/4: Mission 2 is about **Password Strength**. Try to crack the weak 4-digit PIN to see why complexity matters.';
+                loadPasswordProtector();
+            } else if (gameName === 'firewall') {
+                tutorialMessage = 'TUTORIAL 3/4: The third mission is the **Firewall Fortress**. You must decide which network traffic to **ALLOW** and which to **DENY** based on security best practices.';
+                loadFirewallFortress();
+            } else if (gameName === 'encryption') {
+                tutorialMessage = 'TUTORIAL 4/4: Your final mission is the **Encryption Decryptor**. Try to solve the basic cipher to understand how data is secured!';
+                loadEncryptionDecryptor();
+            } else {
+                loadEndOfTourScreen();
+                return;
+            }
+
+            // Display a clear tutorial message on the game screen
+            document.getElementById('game-container').insertAdjacentHTML('afterbegin', `<div class="tutorial-message">${tutorialMessage}</div>`);
+            logToTerminal(`[GUIDE] Instructions provided for ${gameName.toUpperCase()}.`);
+        }
+
+        function loadEndOfTourScreen() {
+            gameContainer.dataset.currentGame = 'completed';
+            gameContainer.dataset.guidedTour = 'false';
+
+            gameContainer.innerHTML = `
+                <div class="flex flex-col items-center justify-center h-96 text-center">
+                    <svg class="w-16 h-16 text-yellow-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2l4-4M7.835 4.354A6.711 6.711 0 0012 12c1.782 0 3.41-.655 4.678-1.758a.5.5 0 01.761.644c-1.42 1.487-3.328 2.296-5.439 2.296s-4.02-.809-5.439-2.296a.5.5 0 01.76-.644C7.865 11.345 9.493 12 12 12s4.135-.655 5.439-1.758a.5.5 0 01.761.644c-1.42 1.487-3.328 2.296-5.439 2.296s-4.02-.809-5.439-2.296a.5.5 0 01.76-.644z"></path>
+                    </svg>
+                    <h2 class="text-4xl text-lime-400 mb-4 font-bold">Guided Tour Complete!</h2>
+                    <p class="text-gray-400 mb-6">
+                        You successfully completed the introductory course. You have now learned the basics of:
+                        <ul class="list-disc list-inside mt-2 text-left w-64 mx-auto text-gray-300">
+                            <li>Phishing Identification</li>
+                            <li>Password Strength</li>
+                            <li>Network Filtering</li>
+                            <li>Data Encryption</li>
+                        </ul>
+                    </p>
+                    <button class="game-button py-3 px-8 bg-lime-600 hover:bg-lime-700 text-white font-bold rounded-lg" onclick="loadWelcomeScreen()">
+                        Return to Start
+                    </button>
+                </div>
+            `;
+        }
+        
+        /**
+         * Checks if the player is in a guided tour and manages the transition to the next step.
+         * @param {string} completedGameName - The name of the game just finished.
+         */
+        function handleGameCompletion(completedGameName) {
+            if (gameContainer.dataset.guidedTour === 'true') {
+                const currentIndex = gameSequence.indexOf(completedGameName);
+                const nextGameName = gameSequence[currentIndex + 1];
+
+                if (nextGameName) {
+                    logToTerminal(`[GUIDE] Step ${currentIndex + 1} Complete. Preparing next mission: ${nextGameName.toUpperCase()}.`);
+                    setTimeout(() => {
+                        loadGuidedNextStep(nextGameName);
+                    }, 3000); // 3-second delay to read feedback
+                } else {
+                    logToTerminal('[GUIDE] All missions complete! Loading Graduation Ceremony...');
+                    setTimeout(() => {
+                        loadEndOfTourScreen();
+                    }, 3000);
+                }
+            }
+        }
+
+        // --- Game 1: Phishing Finder (Expanded Scenarios) ---
+
+        const phishingScenarios = [
+            {
+                type: 'Email Link',
+                prompt: 'Your Amazon account has been suspended. Click here to verify: https://amason-login.com/secure',
+                isMalicious: true,
+                reason: 'The URL uses "amason" instead of "amazon" (typosquatting).'
+            },
+            {
+                type: 'URL Preview',
+                prompt: 'https://google.com/search?q=weather',
+                isMalicious: false,
+                reason: 'This is a legitimate Google search URL.'
+            },
+            {
+                type: 'Email Link',
+                prompt: 'Dear customer, you have won a $1,000 gift card! Click now: https://rewards.bank-service.net/claim?id=1234',
+                isMalicious: true,
+                reason: 'This uses urgency and an unexpected reward, common phishing tactics. The domain "bank-service.net" is suspicious.'
+            },
+            // NEW SCENARIOS ADDED
+            {
+                type: 'SMS (Smishing)',
+                prompt: 'Your package delivery failed. Please update your address and card details here: hxxps://track-pkg-service.xyz',
+                isMalicious: true,
+                reason: 'Unexpected SMS about a package delivery demanding immediate financial info via a suspicious domain (often denoted by hxxps in logs).'
+            },
+            {
+                type: 'Social Media DM',
+                prompt: 'Congrats! You are one of 100 people selected for a free gaming console. Click this link and enter your full credentials to claim it!',
+                isMalicious: true,
+                reason: 'Offers that are too good to be true and require your full credentials immediately are always malicious (Credential Harvesting).'
+            },
+            {
+                type: 'System Notification',
+                prompt: 'Your account login requires two-factor authentication (2FA). Enter the code sent to your phone.',
+                isMalicious: false,
+                reason: 'This is a standard security prompt for 2FA. 2FA is a great security measure, not a threat itself.'
+            }
+            // END NEW SCENARIOS
+        ];
+        let currentPhishingIndex = 0;
+
+        function loadPhishingFinder() {
+            gameContainer.dataset.currentGame = 'phishing';
+            currentPhishingIndex = 0;
+            displayPhishingScenario();
+            logToTerminal(`[SUCCESS] Phishing Finder: Loaded ${phishingScenarios.length} scenarios.`, 'SUCCESS');
+        }
+
+        function displayPhishingScenario() {
+            if (currentPhishingIndex >= phishingScenarios.length) {
+                gameContainer.innerHTML = '<h3 class="text-3xl text-lime-400 mb-4">Mission Complete!</h3><p>You have successfully completed all Phishing scenarios. You are now more resistant to social engineering!</p><button class="game-button mt-4 py-2 px-4 bg-gray-700 hover:bg-lime-700 rounded-lg text-white" onclick="loadPhishingFinder()">Replay Mission</button>';
+                // Handle tutorial completion step
+                handleGameCompletion('phishing');
+                return;
+            }
+
+            const scenario = phishingScenarios[currentPhishingIndex];
+
+            // Recreate the content with a possible tutorial message if the guided tour is active
+            let tutorialHint = gameContainer.dataset.guidedTour === 'true' ? 
+                '<div class="tutorial-message">HINT: Look for spelling mistakes, urgency, and suspicious domain names.</div>' : '';
+
+            gameContainer.innerHTML = `
+                <h2 class="text-3xl text-lime-400 mb-4">Mission 1: Phishing Finder (${currentPhishingIndex + 1}/${phishingScenarios.length})</h2>
+                ${tutorialHint}
+                <p class="text-gray-400 mb-6">Analyze the following message. Is it a malicious Phishing attempt?</p>
+                <div class="bg-gray-700 p-4 rounded-lg mb-6 shadow-inner border-l-4 border-lime-400">
+                    <p class="text-xs text-lime-400 uppercase">${scenario.type}:</p>
+                    <p class="text-xl break-words">${scenario.prompt}</p>
+                </div>
+                <div class="flex space-x-4 justify-center">
+                    <button class="game-button py-3 px-8 bg-green-600 hover:bg-green-700 text-white font-bold rounded-lg" onclick="checkPhishing(false)">SAFE</button>
+                    <button class="game-button py-3 px-8 bg-red-600 hover:bg-red-700 text-white font-bold rounded-lg" onclick="checkPhishing(true)">PHISHING</button>
+                </div>
+                <div id="phishing-feedback" class="mt-6 p-3 bg-gray-800 rounded-lg hidden"></div>
+            `;
+            
+            // Re-apply tutorial message if coming from guided tour function
+            if (gameContainer.dataset.guidedTour === 'true' && !document.querySelector('.tutorial-message')) {
+                document.getElementById('game-container').insertAdjacentHTML('afterbegin', `<div class="tutorial-message">TUTORIAL 1/4: Your first mission is to spot **Phishing** attempts. Remember to check for urgency, strange links, and unusual requests!</div>`);
+            }
+        }
+
+        function checkPhishing(userGuess) {
+            const scenario = phishingScenarios[currentPhishingIndex];
+            const feedbackElement = document.getElementById('phishing-feedback');
+
+            let isCorrect = userGuess === scenario.isMalicious;
+
+            if (isCorrect) {
+                feedbackElement.className = 'mt-6 p-3 bg-green-900/50 rounded-lg text-green-400';
+                feedbackElement.innerHTML = `[CORRECT] Access Granted. The message was ${userGuess ? 'MALICIOUS' : 'SAFE'}. Reason: ${scenario.reason}`;
+                logToTerminal(`[SUCCESS] Phishing Finder: Correctly identified scenario #${currentPhishingIndex + 1}.`, 'SUCCESS');
+            } else {
+                feedbackElement.className = 'mt-6 p-3 bg-red-900/50 rounded-lg text-red-400';
+                feedbackElement.innerHTML = `[ERROR] Access Denied. The message was actually ${scenario.isMalicious ? 'MALICIOUS' : 'SAFE'}. Reason: ${scenario.reason}`;
+                logToTerminal(`[FAIL] Phishing Finder: Incorrect identification on scenario #${currentPhishingIndex + 1}.`, 'FAIL');
+            }
+
+            updateScore(isCorrect);
+            feedbackElement.classList.remove('hidden');
+
+            // Move to next scenario after a delay
+            setTimeout(() => {
+                currentPhishingIndex++;
+                displayPhishingScenario();
+            }, 3000);
+        }
+
+
+        // --- Game 2: Password Protector ---
+
+        const WEAK_PIN = String(Math.floor(Math.random() * 9000) + 1000); // 4-digit PIN
+        const MAX_GUESSES = 10;
+        let guessCount = 0;
+
+        function loadPasswordProtector() {
+            gameContainer.dataset.currentGame = 'password';
+            guessCount = 0;
+            logToTerminal(`[INFO] Password Protector: Target PIN set (${WEAK_PIN}). Attempts remaining: ${MAX_GUESSES}.`, 'INFO');
+
+            let tutorialHint = gameContainer.dataset.guidedTour === 'true' ? 
+                '<div class="tutorial-message">TUTORIAL 2/4: Mission 2 is about **Password Strength**. Try to crack the weak 4-digit PIN to see why complexity matters.</div>' : '';
+
+            gameContainer.innerHTML = `
+                <h2 class="text-3xl text-lime-400 mb-4">Mission 2: Password Protector</h2>
+                ${tutorialHint}
+                <p class="text-gray-400 mb-6">Part 1: Brute Force Simulator (Crack a 4-digit PIN in ${MAX_GUESSES} tries to demonstrate weakness).</p>
+                
+                <div class="flex items-center space-x-4 mb-4 justify-center">
+                    <input type="text" id="pin-input" maxlength="4" placeholder="Enter 4-digit PIN"
+                           class="w-48 p-3 bg-gray-700 border border-lime-400 text-lime-400 rounded-lg focus:outline-none focus:ring-2 focus:ring-lime-500 text-center text-2xl tracking-widest">
+                    <button class="game-button py-3 px-6 bg-red-600 hover:bg-red-700 text-white font-bold rounded-lg" onclick="attemptCrack()">Attempt Crack</button>
+                </div>
+                
+                <p id="password-feedback" class="text-center text-lg text-gray-400 mb-6">Attempts Left: ${MAX_GUESSES - guessCount}</p>
+
+                <div id="password-result" class="mt-4 p-3 bg-gray-800 rounded-lg hidden"></div>
+
+                <p class="text-gray-400 mt-8 pt-4 border-t border-gray-700">Part 2: Password Strength Generator (Feature)</p>
+                <div class="flex items-center space-x-4 mt-4 justify-center">
+                    <button class="game-button py-3 px-6 bg-lime-600 hover:bg-lime-700 text-white font-bold rounded-lg" onclick="generateStrongPassword()">Generate Strong Password</button>
+                </div>
+                <div id="password-generator-output" class="mt-4 p-3 bg-gray-700 rounded-lg text-center text-xl text-yellow-300 hidden"></div>
+            `;
+        }
+
+        function attemptCrack() {
+            const pinInput = document.getElementById('pin-input');
+            const feedback = document.getElementById('password-feedback');
+            const result = document.getElementById('password-result');
+            const userGuess = pinInput.value;
+            const crackButton = document.querySelector('button[onclick="attemptCrack()"]');
+
+            if (userGuess.length !== 4 || isNaN(userGuess)) {
+                logToTerminal('[WARNING] Invalid input. Enter exactly 4 digits.', 'WARNING');
+                return;
+            }
+
+            // Only count guesses if the game is not already over
+            if (guessCount < MAX_GUESSES && crackButton.disabled !== true) {
+                guessCount++;
+            }
+            
+            feedback.textContent = `Attempts Left: ${MAX_GUESSES - guessCount}`;
+            pinInput.value = '';
+
+            let gameOver = false;
+            let success = false;
+
+            if (userGuess === WEAK_PIN) {
+                result.className = 'mt-4 p-3 bg-green-900/50 rounded-lg text-green-400';
+                result.innerHTML = `[BREACH] Success! The weak PIN was cracked in ${guessCount} attempts. This shows why short, numeric passwords are risky.`;
+                updateScore(true);
+                logToTerminal(`[SUCCESS] Brute Force successful. PIN: ${WEAK_PIN}. Attempts: ${guessCount}.`, 'SUCCESS');
+                gameOver = true;
+                success = true;
+            } else if (guessCount >= MAX_GUESSES) {
+                result.className = 'mt-4 p-3 bg-red-900/50 rounded-lg text-red-400';
+                result.innerHTML = `[FAILURE] Brute Force attempts failed. The PIN was: ${WEAK_PIN}. Even a weak password can take time. Imagine a 12-character complex password!`;
+                updateScore(false);
+                logToTerminal(`[FAIL] Brute Force failed. Maximum attempts reached.`, 'FAIL');
+                gameOver = true;
+            } else {
+                result.className = 'mt-4 p-3 bg-gray-800/50 rounded-lg text-yellow-400';
+                result.innerHTML = `[INCORRECT] Attempt ${guessCount} failed. Keep trying to break the weak security.`;
+                result.classList.remove('hidden');
+                logToTerminal(`[INFO] Attempt ${guessCount} failed. Guess: ${userGuess}`, 'INFO');
+            }
+
+            if (gameOver) {
+                crackButton.disabled = true;
+                crackButton.classList.add('opacity-50');
+                if (gameContainer.dataset.guidedTour === 'true') {
+                    // Call completion handler when the game logic determines it's over
+                    handleGameCompletion('password');
+                }
+            } else {
+                 result.classList.remove('hidden');
+            }
+        }
+
+        function generateStrongPassword() {
+            const length = 16;
+            const charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_+";
+            let password = "";
+            for (let i = 0; i < length; i++) {
+                const randomIndex = Math.floor(Math.random() * charset.length);
+                password += charset[randomIndex];
+            }
+
+            const outputDiv = document.getElementById('password-generator-output');
+            outputDiv.textContent = password;
+            outputDiv.classList.remove('hidden');
+            logToTerminal(`[GENERATED] Strong password created (16 chars, complex). Always use a password manager.`, 'INFO');
+        }
+
+        // --- Game 3: Firewall Fortress (Expanded Rules) ---
+
+        const firewallRules = [
+            { ip: '192.168.1.100', port: 80, protocol: 'TCP', action: 'Allow', reason: 'Web traffic (HTTP) is usually permitted for access.' },
+            { ip: '10.0.0.5', port: 22, protocol: 'TCP', action: 'Deny', reason: 'SSH (Port 22) from internal networks should be denied unless explicitly needed for administration, limiting lateral movement.' },
+            { ip: '203.0.113.12', port: 21, protocol: 'FTP', action: 'Deny', reason: 'FTP (Port 21) is insecure and should be blocked/replaced with SFTP.' },
+            { ip: '10.10.10.1', port: 53, protocol: 'UDP', action: 'Allow', reason: 'DNS (Port 53) is essential for name resolution.' },
+            // NEW RULES ADDED
+            { ip: '172.16.0.2', port: 443, protocol: 'TCP', action: 'Allow', reason: 'HTTPS (Port 443) is essential for secure web browsing and should be allowed (Encrypted traffic).' },
+            { ip: '45.79.10.15', port: 3389, protocol: 'TCP', action: 'Deny', reason: 'RDP (Remote Desktop, Port 3389) should almost always be blocked from external/unknown IPs due to potential brute force or vulnerability attacks.' }
+            // END NEW RULES
+        ];
+        let currentFirewallIndex = 0;
+
+        function loadFirewallFortress() {
+            gameContainer.dataset.currentGame = 'firewall';
+            currentFirewallIndex = 0;
+            displayFirewallScenario();
+            logToTerminal(`[SUCCESS] Firewall Fortress: Loaded ${firewallRules.length} ruleset.`, 'SUCCESS');
+        }
+
+        function displayFirewallScenario() {
+            if (currentFirewallIndex >= firewallRules.length) {
+                gameContainer.innerHTML = '<h3 class="text-3xl text-lime-400 mb-4">Mission Complete!</h3><p>You have successfully managed the firewall rules. You understand the principle of least privilege in networking!</p><button class="game-button mt-4 py-2 px-4 bg-gray-700 hover:bg-lime-700 rounded-lg text-white" onclick="loadFirewallFortress()">Replay Mission</button>';
+                // Handle tutorial completion step
+                handleGameCompletion('firewall');
+                return;
+            }
+
+            const rule = firewallRules[currentFirewallIndex];
+            
+            let tutorialHint = gameContainer.dataset.guidedTour === 'true' ? 
+                '<div class="tutorial-message">HINT: Remember the Principle of Least Privilege. Only allow what is absolutely necessary!</div>' : '';
+
+            gameContainer.innerHTML = `
+                <h2 class="text-3xl text-lime-400 mb-4">Mission 3: Firewall Fortress (${currentFirewallIndex + 1}/${firewallRules.length})</h2>
+                ${tutorialHint}
+                <p class="text-gray-400 mb-6">A connection attempt has been made. Based on best practices, should you **ALLOW** or **DENY** this traffic?</p>
+
+                <div class="bg-gray-700 p-6 rounded-lg mb-6 shadow-inner border-l-4 border-red-500">
+                    <p class="text-xl mb-2 text-lime-400">Connection Details:</p>
+                    <table class="w-full text-left text-lg">
+                        <tr><td class="text-gray-400 w-1/3">Source IP:</td><td class="text-white">${rule.ip}</td></tr>
+                        <tr><td class="text-gray-400 w-1/3">Destination Port:</td><td class="text-white">${rule.port}</td></tr>
+                        <tr><td class="text-gray-400 w-1/3">Protocol:</td><td class="text-white">${rule.protocol}</td></tr>
+                    </table>
+                </div>
+
+                <div class="flex space-x-4 justify-center">
+                    <button class="game-button py-3 px-8 bg-green-600 hover:bg-green-700 text-white font-bold rounded-lg" onclick="checkFirewall('Allow')">ALLOW</button>
+                    <button class="game-button py-3 px-8 bg-red-600 hover:bg-red-700 text-white font-bold rounded-lg" onclick="checkFirewall('Deny')">DENY</button>
+                </div>
+                <div id="firewall-feedback" class="mt-6 p-3 bg-gray-800 rounded-lg hidden"></div>
+            `;
+        }
+
+        function checkFirewall(userAction) {
+            const rule = firewallRules[currentFirewallIndex];
+            const feedbackElement = document.getElementById('firewall-feedback');
+
+            let isCorrect = userAction === rule.action;
+
+            if (isCorrect) {
+                feedbackElement.className = 'mt-6 p-3 bg-green-900/50 rounded-lg text-green-400';
+                feedbackElement.innerHTML = `[CORRECT] Rule Applied: ${userAction}. Best Practice: ${rule.reason}`;
+                logToTerminal(`[SUCCESS] Firewall: Correctly ${userAction}ed traffic on Port ${rule.port}.`, 'SUCCESS');
+            } else {
+                feedbackElement.className = 'mt-6 p-3 bg-red-900/50 rounded-lg text-red-400';
+                feedbackElement.innerHTML = `[ERROR] Rule Ignored. Correct Action was ${rule.action}. Best Practice: ${rule.reason}`;
+                logToTerminal(`[FAIL] Firewall: Incorrect action for traffic on Port ${rule.port}.`, 'FAIL');
+            }
+
+            updateScore(isCorrect);
+            feedbackElement.classList.remove('hidden');
+
+            // Move to next scenario after a delay
+            setTimeout(() => {
+                currentFirewallIndex++;
+                displayFirewallScenario();
+            }, 3000);
+        }
+
+        // --- Game 4: Encryption Decryptor (NEW GAME) ---
+        
+        const encryptionShift = 3; // Caesar Cipher shift
+        const secretMessages = [
+            { cipher: "JHPQLQL LV JUHDW", plain: "GEMINI IS GREAT", hint: "Shift back 3 letters (A becomes X, B becomes Y, etc.)" },
+            { cipher: "FBEHU VHFXULWB LV IXQ", plain: "CYBER SECURITY IS FUN", hint: "It's a fixed shift cipher. The key is in the instructions." }
+        ];
+        let currentEncryptionIndex = 0;
+
+        // Simple Caesar Decryption function
+        function caesarDecrypt(text, shift) {
+            let result = '';
+            text = text.toUpperCase().replace(/[^A-Z]/g, ' '); // Keep only letters and spaces
+            for (let i = 0; i < text.length; i++) {
+                let char = text.charCodeAt(i);
+                if (char >= 65 && char <= 90) { // If it's a letter
+                    // Perform decryption shift: (char - 'A' - shift + 26) % 26 + 'A'
+                    char = ((char - 65 - shift + 26) % 26) + 65;
+                }
+                result += String.fromCharCode(char);
+            }
+            return result.trim();
+        }
+
+        function loadEncryptionDecryptor() {
+            gameContainer.dataset.currentGame = 'encryption';
+            currentEncryptionIndex = 0;
+            displayEncryptionScenario();
+            logToTerminal(`[SUCCESS] Encryption Decryptor: Loaded ${secretMessages.length} cipher scenarios.`, 'SUCCESS');
+        }
+
+        function displayEncryptionScenario() {
+            if (currentEncryptionIndex >= secretMessages.length) {
+                gameContainer.innerHTML = '<h3 class="text-3xl text-lime-400 mb-4">Mission Complete!</h3><p>You have successfully decrypted the messages. You now understand the basic concepts of encryption! Try making your own cipher!</p><button class="game-button mt-4 py-2 px-4 bg-gray-700 hover:bg-lime-700 rounded-lg text-white" onclick="loadEncryptionDecryptor()">Replay Mission</button>';
+                // Handle tutorial completion step
+                handleGameCompletion('encryption');
+                return;
+            }
+
+            const message = secretMessages[currentEncryptionIndex];
+
+            let tutorialHint = gameContainer.dataset.guidedTour === 'true' ? 
+                `<div class="tutorial-message">HINT: You need to apply a Caesar Cipher decryption with a shift of 3. (${message.hint})</div>` : '';
+
+            gameContainer.innerHTML = `
+                <h2 class="text-3xl text-lime-400 mb-4">Mission 4: Encryption Decryptor (${currentEncryptionIndex + 1}/${secretMessages.length})</h2>
+                ${tutorialHint}
+                <p class="text-gray-400 mb-4">A secret message was intercepted, but it's encrypted. Decrypt the text below to reveal the secret.</p>
+
+                <div class="bg-gray-700 p-6 rounded-lg mb-6 shadow-inner border-l-4 border-yellow-500">
+                    <p class="text-xs text-yellow-400 uppercase">ENCRYPTED CIPHER TEXT:</p>
+                    <p class="text-2xl break-words tracking-widest text-white font-bold">${message.cipher}</p>
+                </div>
+
+                <div class="flex flex-col items-center space-y-4 mb-4">
+                    <input type="text" id="decryption-input" placeholder="Enter decrypted message here"
+                           class="w-full p-3 bg-gray-700 border border-yellow-400 text-yellow-400 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500 text-center text-xl uppercase">
+                    <button class="game-button py-3 px-8 bg-yellow-600 hover:bg-yellow-700 text-white font-bold rounded-lg" onclick="checkDecryption()">Decrypt Message</button>
+                </div>
+                <div id="encryption-feedback" class="mt-6 p-3 bg-gray-800 rounded-lg hidden"></div>
+            `;
+        }
+
+        function checkDecryption() {
+            const message = secretMessages[currentEncryptionIndex];
+            const feedbackElement = document.getElementById('encryption-feedback');
+            const userInput = document.getElementById('decryption-input').value.toUpperCase().trim().replace(/[^A-Z ]/g, ''); // Sanitize input
+            
+            // Decrypt the cipher text to get the target plain text (in case the source array has errors)
+            const targetPlain = caesarDecrypt(message.cipher, encryptionShift).trim();
+
+            let isCorrect = userInput === targetPlain;
+
+            if (isCorrect) {
+                feedbackElement.className = 'mt-6 p-3 bg-green-900/50 rounded-lg text-green-400';
+                feedbackElement.innerHTML = `[SUCCESS] Decryption Complete! The secret message is: <span class="text-2xl font-bold">${targetPlain}</span>`;
+                logToTerminal(`[SUCCESS] Encryption Decryptor: Cracked cipher #${currentEncryptionIndex + 1}.`, 'SUCCESS');
+            } else {
+                feedbackElement.className = 'mt-6 p-3 bg-red-900/50 rounded-lg text-red-400';
+                feedbackElement.innerHTML = `[ERROR] Incorrect Decryption. Keep trying! Remember the shift is 3.`;
+                logToTerminal(`[FAIL] Encryption Decryptor: Failed attempt on cipher #${currentEncryptionIndex + 1}.`, 'FAIL');
+            }
+
+            updateScore(isCorrect);
+            feedbackElement.classList.remove('hidden');
+
+            if (isCorrect) {
+                setTimeout(() => {
+                    currentEncryptionIndex++;
+                    displayEncryptionScenario();
+                }, 3000);
+            }
+        }
+        
+        // Initialize score display and load welcome screen on load
+        window.onload = function() {
+            scoreDisplay.textContent = `${score.correct} / ${score.total}`;
+            loadWelcomeScreen();
+        };
+
+    </script>
+</body>
+</html>
